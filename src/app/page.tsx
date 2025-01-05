@@ -4,9 +4,8 @@ import Hero from "@/components/Hero";
 import Newsletter from "@/components/Newsletter";
 import Photos from "@/components/Photos";
 import Resume from "@/components/Resume";
-import { ArticleWithSlug, getAllArticles } from "@/lib/article";
+import { ArticleWithSlug} from "@/lib/article";
 import { client } from "@/sanity/lib/client";
-import { groq } from "next-sanity";
 
 
 
@@ -25,7 +24,7 @@ const Article = ({ article }: { article: ArticleWithSlug }) => {
 
 
 export default async function Home() {
-  const query = groq`*[_type == "post"]{
+  const query = `*[_type == "post"]{
     title, description, publishedAt, "slug": slug.current
   }`;
 
