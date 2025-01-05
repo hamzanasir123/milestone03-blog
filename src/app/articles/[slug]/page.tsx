@@ -1,11 +1,8 @@
-import { Button } from "@/components/Button";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 import { PortableText } from "@portabletext/react";
 import Image from "next/image";
 import React from "react";
-import { IoMdMailUnread } from "react-icons/io";
-// import "@/style/globals.css";
 
 interface Post {
   title: string;
@@ -17,11 +14,10 @@ interface Post {
   body: any;
 }
 
-const AriclePage = async ({
-  params: { slug },
-}: {
-  params: { slug: string };
-}) => {
+const AriclePage = async ({  params }: {  params: { slug: string } }) => {
+
+  const {slug} = params;
+
   const query = `*[_type == "post" && slug.current=="${slug}"]{
   title,description,mainImage,body,publishedAt,
     author->{
