@@ -5,7 +5,7 @@ import { ThemeProvider, useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
 
 function usePrevious<T>(value: T) {
-  let ref = useRef<T>();
+  let ref = useRef<T | undefined>(undefined);
 
   useEffect(() => {
     ref.current = value;

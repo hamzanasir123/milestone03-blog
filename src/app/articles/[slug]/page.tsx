@@ -3,6 +3,11 @@ import { urlFor } from "@/sanity/lib/image";
 import { PortableText } from "@portabletext/react";
 import Image from "next/image";
 import React from "react";
+import { Metadata } from "next";
+
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
 
 interface Post {
   title: string;
@@ -14,9 +19,8 @@ interface Post {
   body: any;
 }
 
-const AriclePage = async ({  params }: {  params: { slug: string } }) => {
-
-  const {slug} = params;
+export async function generateMetadata({params} : PageProps) : Promise<Metadata> {
+  const {slug} = await params;
 
   const query = `*[_type == "post" && slug.current=="${slug}"]{
   title,description,mainImage,body,publishedAt,
@@ -26,6 +30,39 @@ const AriclePage = async ({  params }: {  params: { slug: string } }) => {
 }[0]`;
 
   const post: Post = await client.fetch(query);
+
+  return {
+    title: post ? post.title : "Post Not Found",
+  }
+
+}
+
+
+const AriclePage = async ({  params }: PageProps) => {
+
+  const { slug } = await params;
+
+  const query = `*[_type == "post" && slug.current == "${slug}"]{
+    title,
+    description,
+    mainImage,
+    body,
+    publishedAt,
+    author->{
+      name
+    }
+  }[0]`;
+
+  const post = await client.fetch(query);
+
+  if (!post) {
+    return (
+      <div>
+        <h1>Post Not Found</h1>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="m-10">
